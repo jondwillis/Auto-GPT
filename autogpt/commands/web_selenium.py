@@ -18,6 +18,7 @@ from selenium.webdriver.support.ui import Select
 import logging
 from pathlib import Path
 from autogpt.config import Config
+from sys import platform
 
 FILE_DIR = Path(__file__).parent.parent
 CFG = Config()
@@ -76,6 +77,9 @@ def scrape_text_with_selenium(url: str) -> tuple[WebDriver, str]:
         # See https://developer.apple.com/documentation/webkit/testing_with_webdriver_in_safari
         driver = webdriver.Safari(options=options)
     else:
+        if platform == "linux" or platform == "linux2":
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--remote-debugging-port=9222")
         options.add_argument("--no-sandbox")
         driver = webdriver.Chrome(
             executable_path=ChromeDriverManager().install(), options=options
