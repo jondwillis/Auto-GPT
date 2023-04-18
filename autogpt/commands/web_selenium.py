@@ -1,24 +1,25 @@
 """Selenium web scraping module."""
 from __future__ import annotations
 
-from selenium import webdriver
-from autogpt.processing.html import extract_hyperlinks, format_hyperlinks
-import autogpt.processing.text as summary
-from bs4 import BeautifulSoup
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.safari.options import Options as SafariOptions
-from selenium.webdriver.support.ui import Select
 import logging
 from pathlib import Path
-from autogpt.config import Config
 from sys import platform
+
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.safari.options import Options as SafariOptions
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+
+import autogpt.processing.text as summary
+from autogpt.config import Config
+from autogpt.processing.html import extract_hyperlinks, format_hyperlinks
 
 FILE_DIR = Path(__file__).parent.parent
 CFG = Config()
@@ -146,36 +147,3 @@ def add_header(driver: WebDriver) -> None:
         None
     """
     driver.execute_script(open(f"{FILE_DIR}/js/overlay.js", "r").read())
-
-def click_button(driver: WebDriver, button_xpath):
-    """Click a button using Selenium WebDriver
-
-    Args:
-        driver (webdriver): The WebDriver instance controlling the browser
-        button_xpath (str): The XPath of the button to click
-    """
-    button = driver.find_element(By.XPATH, button_xpath)
-    button.click()
-
-def input_text(driver, input_xpath, text):
-    """Enter text into an input field using Selenium WebDriver
-
-    Args:
-        driver (webdriver): The WebDriver instance controlling the browser
-        input_xpath (str): The XPath of the input field to enter text into
-        text (str): The text to enter into the input field
-    """
-    input_field = driver.find_element(By.XPATH, input_xpath)
-    input_field.send_keys(text)
-
-def select_option(driver, select_xpath, option_value):
-    """Select an option from a dropdown using Selenium WebDriver
-
-    Args:
-        driver (webdriver): The WebDriver instance controlling the browser
-        select_xpath (str): The XPath of the select input field to choose an option from
-        option_value (str): The value attribute of the option to select
-    """
-
-    select = Select(driver.find_element(By.XPATH, select_xpath))
-    select.select_by_value(option_value)
